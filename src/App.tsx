@@ -12,6 +12,8 @@ import {
   useRecoilValue,
 } from "recoil";
 
+import { Box } from "@mui/material";
+
 import "./App.css";
 
 function getIntersection(
