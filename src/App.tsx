@@ -60,7 +60,10 @@ const eventsState = atom({
       onSet((events) => {
         const mergedEvents = {} as Record<string, EventObject[]>;
         Object.keys(events).forEach((key) => {
-          mergedEvents[key] = mergeOverlappingIntersections(events[key]);
+          mergedEvents[key] = mergeOverlappingIntersections(
+            // merge twice because there might be overlapping intersections after the first merge
+            mergeOverlappingIntersections(events[key])
+          );
         });
 
         setSelf(mergedEvents);
@@ -99,8 +102,8 @@ function C({ id, intersections }: CProps) {
         {
           id: "selection",
           name: "Selection",
-          backgroundColor: "#9e5fff",
-          borderColor: "#9e5fff",
+          backgroundColor: "#23CE6B",
+          borderColor: "#23CE6B",
         },
         {
           id: "intersection",
