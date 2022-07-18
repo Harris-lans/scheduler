@@ -119,6 +119,19 @@ function Timetable({ id, intersections }: TimetableProps) {
   }));
   const allEvents = [...events, ...intersections];
 
+  const [gridSelectionElements, setGridSelectionElements] = useState<
+    HTMLElement[]
+  >([]);
+
+  useEffect(() => {
+    gridSelectionElements.forEach((element: HTMLElement) => {
+      // I don't know why this setTimeout is needed
+      setTimeout(() => {
+        element.remove();
+      }, 0);
+    });
+  }, [gridSelectionElements, events]);
+
   return (
     <Calendar
       calendars={[
@@ -151,12 +164,7 @@ function Timetable({ id, intersections }: TimetableProps) {
             { start: event.start, end: event.end },
           ],
         }));
-        event.gridSelectionElements.forEach((element: HTMLElement) => {
-          // I don't know why this setTimeout is needed
-          setTimeout(() => {
-            element.remove();
-          }, 0);
-        });
+        setGridSelectionElements(event.gridSelectionElements);
       }}
       events={allEvents}
     />
