@@ -107,9 +107,7 @@ const intersectionsState = selector({
   },
 });
 
-function Timetable({ id }: { id: number }) {
-  const { events, addNewEvent } = useEvents(id);
-
+function useRemoveGridSelectionElements(events: any) {
   const [gridSelectionElements, setGridSelectionElements] = useState<
     HTMLElement[]
   >([]);
@@ -122,6 +120,13 @@ function Timetable({ id }: { id: number }) {
       }, 0);
     });
   }, [gridSelectionElements, events]);
+
+  return setGridSelectionElements;
+}
+
+function Timetable({ id }: { id: number }) {
+  const { events, addNewEvent } = useEvents(id);
+  const setGridSelectionElements = useRemoveGridSelectionElements(events);
 
   return (
     <Calendar
@@ -178,6 +183,7 @@ function useParticipants() {
   return {
     addNewParticipant,
     removeParticipant,
+    participants: eventsKeys,
   };
 }
 
@@ -228,12 +234,7 @@ function Participant({ id }: { id: number }) {
 }
 
 function App() {
-  const intersections = useRecoilValue(intersectionsState).map((s) => ({
-    ...s,
-    calendarId: "intersection",
-  }));
-  const eventsKeys = useRecoilValue(eventsKeysState);
-  const { addNewParticipant } = useParticipants();
+  const { participants, addNewParticipant } = useParticipants();
 
   return (
     <Box
@@ -245,8 +246,8 @@ function App() {
         overflowY: "hidden",
       }}
     >
-      {eventsKeys.map((key) => (
-        <Participant key={key} id={key} />
+      {participants.map((id) => (
+        <Participant key={id} id={id} />
       ))}
       <Button onClick={addNewParticipant}>add new participant</Button>
     </Box>
