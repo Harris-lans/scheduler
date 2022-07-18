@@ -13,7 +13,8 @@ import {
   useSetRecoilState,
 } from "recoil";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import "./App.css";
 
@@ -106,18 +107,8 @@ const intersectionsState = selector({
   },
 });
 
-interface TimetableProps {
-  id: number;
-  intersections: EventObject[];
-}
-
-function Timetable({ id, intersections }: TimetableProps) {
-  const [globalEvents, setEvents] = useRecoilState(eventsState);
-  const events = (globalEvents[id] || []).map((e: EventObject) => ({
-    ...e,
-    calendarId: "selection",
-  }));
-  const allEvents = [...events, ...intersections];
+function Timetable({ id }: { id: number }) {
+  const { events, addNewEvent } = useEvents(id);
 
   const [gridSelectionElements, setGridSelectionElements] = useState<
     HTMLElement[]
@@ -157,17 +148,82 @@ function Timetable({ id, intersections }: TimetableProps) {
         taskView: false,
       }}
       onSelectDateTime={(event) => {
-        setEvents((allEvents) => ({
-          ...allEvents,
-          [id]: [
-            ...(allEvents[id] || []),
-            { start: event.start, end: event.end },
-          ],
-        }));
+        addNewEvent(event);
         setGridSelectionElements(event.gridSelectionElements);
       }}
-      events={allEvents}
+      events={events}
     />
+  );
+}
+
+function useParticipants() {
+  const eventsKeys = useRecoilValue(eventsKeysState);
+  const setEvents = useSetRecoilState(eventsState);
+
+  function addNewParticipant() {
+    setEvents((events: Events) => ({
+      ...events,
+      [eventsKeys.length]: [],
+    }));
+  }
+
+  function removeParticipant(id: number = 0) {
+    setEvents((events: Events) => {
+      const newEvents = { ...events };
+      delete newEvents[id];
+      return newEvents;
+    });
+  }
+
+  return {
+    addNewParticipant,
+    removeParticipant,
+  };
+}
+
+function useEvents(id: number = 0) {
+  const intersections = useRecoilValue(intersectionsState).map((s) => ({
+    ...s,
+    calendarId: "intersection",
+  }));
+  const [globalEvents, setEvents] = useRecoilState(eventsState);
+  const selectedEvents = (globalEvents[id] || []).map((e: EventObject) => ({
+    ...e,
+    calendarId: "selection",
+  }));
+  const events = [...selectedEvents, ...intersections];
+
+  function addNewEvent(event: EventObject) {
+    setEvents((allEvents) => ({
+      ...allEvents,
+      [id]: [...(allEvents[id] || []), { start: event.start, end: event.end }],
+    }));
+  }
+
+  return {
+    events,
+    addNewEvent,
+  };
+}
+
+function Participant({ id }: { id: number }) {
+  const { removeParticipant } = useParticipants();
+
+  return (
+    <Box
+      minWidth="300px"
+      width="300px"
+      padding={2}
+      display="flex"
+      flexDirection="column"
+    >
+      <Box alignSelf="end">
+        <IconButton onClick={() => removeParticipant(id)}>
+          <DeleteForeverIcon />
+        </IconButton>
+      </Box>
+      <Timetable id={id} />
+    </Box>
   );
 }
 
@@ -177,15 +233,7 @@ function App() {
     calendarId: "intersection",
   }));
   const eventsKeys = useRecoilValue(eventsKeysState);
-  const setEvents = useSetRecoilState(eventsState);
-
-  // set events adding new key
-  function addNewParticipant() {
-    setEvents((events) => ({
-      ...events,
-      [eventsKeys.length]: [],
-    }));
-  }
+  const { addNewParticipant } = useParticipants();
 
   return (
     <Box
@@ -198,9 +246,7 @@ function App() {
       }}
     >
       {eventsKeys.map((key) => (
-        <Box minWidth="300px" width="300px" key={key} padding={2}>
-          <Timetable id={key} intersections={intersections} />
-        </Box>
+        <Participant key={key} id={key} />
       ))}
       <Button onClick={addNewParticipant}>add new participant</Button>
     </Box>
