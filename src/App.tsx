@@ -10,9 +10,10 @@ import {
   selector,
   useRecoilState,
   useRecoilValue,
+  useSetRecoilState,
 } from "recoil";
 
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import "./App.css";
 
@@ -30,6 +31,14 @@ function getIntersection(
         });
       }
     }
+  }
+  return result;
+}
+
+function getIntersectionOfLists(lists: EventObject[][]): EventObject[] {
+  let result = lists[0] || [];
+  for (const list of lists) {
+    result = getIntersection(result, list);
   }
   return result;
 }
@@ -54,24 +63,36 @@ function mergeOverlappingIntersections(
   return result;
 }
 
+type Events = { [key: number]: EventObject[] };
 const eventsState = atom({
   key: "events",
-  default: {} as Record<string, EventObject[]>,
+  default: { 0: [] } as Events,
   effects: [
     ({ onSet, setSelf }) => {
       onSet((events) => {
-        const mergedEvents = {} as Record<string, EventObject[]>;
-        Object.keys(events).forEach((key) => {
-          mergedEvents[key] = mergeOverlappingIntersections(
-            // merge twice because there might be overlapping intersections after the first merge
-            mergeOverlappingIntersections(events[key])
-          );
-        });
+        const mergedEvents = {} as Events;
+        Object.keys(events)
+          .map(Number)
+          .forEach((key) => {
+            mergedEvents[key] = mergeOverlappingIntersections(
+              // merge twice because there might be overlapping intersections after the first merge
+              mergeOverlappingIntersections(events[key])
+            );
+          });
 
         setSelf(mergedEvents);
       });
     },
   ],
+});
+
+// select events keys
+const eventsKeysState = selector({
+  key: "eventsKeys",
+  get: ({ get }) => {
+    const events = get(eventsState) as Events;
+    return Object.keys(events).map(Number);
+  },
 });
 
 const intersectionsState = selector({
@@ -80,17 +101,17 @@ const intersectionsState = selector({
     const events = get(eventsState);
 
     return mergeOverlappingIntersections(
-      getIntersection(events["a"] || [], events["b"] || [])
+      getIntersectionOfLists(Object.values(events).filter((e) => e.length > 0))
     );
   },
 });
 
-interface CProps {
-  id: string;
+interface TimetableProps {
+  id: number;
   intersections: EventObject[];
 }
 
-function C({ id, intersections }: CProps) {
+function Timetable({ id, intersections }: TimetableProps) {
   const [globalEvents, setEvents] = useRecoilState(eventsState);
   const events = (globalEvents[id] || []).map((e: EventObject) => ({
     ...e,
@@ -147,15 +168,34 @@ function App() {
     ...s,
     calendarId: "intersection",
   }));
+  const eventsKeys = useRecoilValue(eventsKeysState);
+  const setEvents = useSetRecoilState(eventsState);
+
+  // set events adding new key
+  function addNewParticipant() {
+    setEvents((events) => ({
+      ...events,
+      [eventsKeys.length]: [],
+    }));
+  }
+
   return (
-    <div style={{ display: "flex", width: "100%" }}>
-      <div style={{ flexGrow: 1 }}>
-        <C intersections={intersections} id="a" />
-      </div>
-      <div style={{ flexGrow: 1 }}>
-        <C intersections={intersections} id="b" />
-      </div>
-    </div>
+    <Box
+      display="flex"
+      flexDirection="row"
+      width="100%"
+      sx={{
+        overflowX: "scroll",
+        overflowY: "hidden",
+      }}
+    >
+      {eventsKeys.map((key) => (
+        <Box minWidth="300px" width="300px" key={key} padding={2}>
+          <Timetable id={key} intersections={intersections} />
+        </Box>
+      ))}
+      <Button onClick={addNewParticipant}>add new participant</Button>
+    </Box>
   );
 }
 
