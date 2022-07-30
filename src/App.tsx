@@ -11,10 +11,16 @@ import {
   useSetRecoilState,
 } from "recoil";
 
-import { Box, Button, IconButton } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  TextField,
+  Autocomplete,
+} from "@mui/material";
+import { rawTimeZones } from "@vvo/tzdb";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-
-import "./App.css";
 
 function getIntersection(
   list1: EventObject[],
@@ -85,6 +91,12 @@ const eventsState = atom({
   ],
 });
 
+type Timezones = { [key: number]: string };
+const timezonesState = atom({
+  key: "timezones",
+  default: { 0: "" } as Timezones,
+});
+
 // select events keys
 const eventsKeysState = selector({
   key: "eventsKeys",
@@ -148,6 +160,7 @@ function Timetable({ id }: { id: number }) {
 function useParticipants() {
   const eventsKeys = useRecoilValue(eventsKeysState);
   const setEvents = useSetRecoilState(eventsState);
+  const setTimezones = useSetRecoilState(timezonesState);
 
   function addNewParticipant() {
     setEvents((events: Events) => ({
@@ -161,6 +174,11 @@ function useParticipants() {
       const newEvents = { ...events };
       delete newEvents[id];
       return newEvents;
+    });
+    setTimezones((timezones) => {
+      const newTimezones = { ...timezones };
+      delete newTimezones[id];
+      return newTimezones;
     });
   }
 
@@ -196,6 +214,39 @@ function useEvents(id: number = 0) {
   };
 }
 
+function TimezoneSelector({ id }: { id: number }) {
+  const [timezones, setTimezones] = useRecoilState(timezonesState);
+
+  return (
+    <Autocomplete
+      autoHighlight
+      onChange={(e, value) => {
+        setTimezones((timezones) => {
+          const newTimezones = { ...timezones };
+          newTimezones[id] = value?.name || "";
+          return newTimezones;
+        });
+      }}
+      options={rawTimeZones}
+      getOptionLabel={(tz) => tz.rawFormat}
+      renderOption={(props, tz) => (
+        <Box component="li" {...props}>
+          <Typography variant="body1">{tz.rawFormat}</Typography>
+        </Box>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Choose a timezone"
+          inputProps={{
+            ...params.inputProps,
+          }}
+        />
+      )}
+    />
+  );
+}
+
 function Participant({ id }: { id: number }) {
   const { removeParticipant } = useParticipants();
 
@@ -212,6 +263,10 @@ function Participant({ id }: { id: number }) {
           <DeleteForeverIcon />
         </IconButton>
       </Box>
+      <Box pb={2}>
+        <TimezoneSelector id={id} />
+      </Box>
+
       <Timetable id={id} />
     </Box>
   );
