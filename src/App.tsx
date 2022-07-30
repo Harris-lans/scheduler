@@ -1,10 +1,9 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import Calendar from "@toast-ui/react-calendar";
 
-import type { EventObject, Options } from "@toast-ui/calendar";
+import type { EventObject } from "@toast-ui/calendar";
 import "@toast-ui/calendar/dist/toastui-calendar.min.css";
 import {
-  RecoilRoot,
   atom,
   selector,
   useRecoilState,
