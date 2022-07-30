@@ -273,7 +273,7 @@ function useEvents(id: number = 0) {
 }
 
 function TimezoneSelector({ id }: { id: number }) {
-  const [timezones, setTimezones] = useRecoilState(timezonesState);
+  const setTimezones = useSetRecoilState(timezonesState);
 
   return (
     <Autocomplete
