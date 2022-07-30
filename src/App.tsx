@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import logo from "./logo.svg";
+import { useRef, useEffect, useState } from "react";
 import Calendar from "@toast-ui/react-calendar";
 
 import type { EventObject, Options } from "@toast-ui/calendar";
@@ -107,29 +106,13 @@ const intersectionsState = selector({
   },
 });
 
-function useRemoveGridSelectionElements(events: any) {
-  const [gridSelectionElements, setGridSelectionElements] = useState<
-    HTMLElement[]
-  >([]);
-
-  useEffect(() => {
-    gridSelectionElements.forEach((element: HTMLElement) => {
-      // I don't know why this setTimeout is needed
-      setTimeout(() => {
-        element.remove();
-      }, 0);
-    });
-  }, [gridSelectionElements, events]);
-
-  return setGridSelectionElements;
-}
-
 function Timetable({ id }: { id: number }) {
   const { events, addNewEvent } = useEvents(id);
-  const setGridSelectionElements = useRemoveGridSelectionElements(events);
+  const calendarRef = useRef(null);
 
   return (
     <Calendar
+      ref={calendarRef}
       calendars={[
         {
           id: "selection",
@@ -154,7 +137,9 @@ function Timetable({ id }: { id: number }) {
       }}
       onSelectDateTime={(event) => {
         addNewEvent(event);
-        setGridSelectionElements(event.gridSelectionElements);
+
+        const calendarInstance = (calendarRef.current as any).getInstance();
+        calendarInstance.clearGridSelections();
       }}
       events={events}
     />
