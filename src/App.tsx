@@ -168,7 +168,7 @@ function useParticipants() {
   function addNewParticipant() {
     setEvents((events: Events) => ({
       ...events,
-      [eventsKeys.length]: [],
+      [(eventsKeys?.at(-1) ?? 0) + 1]: [],
     }));
   }
 
