@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import Calendar from "@toast-ui/react-calendar";
 
+import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+
 import type { EventObject } from "@toast-ui/calendar";
 import "@toast-ui/calendar/dist/toastui-calendar.min.css";
 import {
@@ -91,7 +93,43 @@ const eventsState = atom({
   ],
 });
 
+function convertEventObjectsToUTC(
+  list: EventObject[],
+  timezone: typeof rawTimeZones[number]["name"]
+) {
+  return list.map((item) => {
+    return {
+      ...item,
+      start: zonedTimeToUtc(item.start, timezone),
+      end: zonedTimeToUtc(item.end, timezone),
+    };
+  });
+}
+
 type Timezones = { [key: number]: string };
+function convertEventsToUTC(events: Events, timezones: Timezones) {
+  const result: Events = {};
+  Object.keys(events)
+    .map(Number)
+    .forEach((key) => {
+      result[key] = convertEventObjectsToUTC(events[key], timezones[key]);
+    });
+  return result;
+}
+
+function convertEventObjectsFromUTC(
+  list: EventObject[],
+  timezone: typeof rawTimeZones[number]["name"]
+) {
+  return list.map((item) => {
+    return {
+      ...item,
+      start: utcToZonedTime(item.start, timezone),
+      end: utcToZonedTime(item.end, timezone),
+    };
+  });
+}
+
 const timezonesState = atom({
   key: "timezones",
   default: { 0: "" } as Timezones,
@@ -110,16 +148,29 @@ const intersectionsState = selector({
   key: "intersections",
   get: ({ get }) => {
     const events = get(eventsState);
+    const timezones = get(timezonesState);
+    const utcEvents = convertEventsToUTC(events, timezones);
 
     return mergeOverlappingIntersections(
-      getIntersectionOfLists(Object.values(events).filter((e) => e.length > 0))
+      getIntersectionOfLists(
+        Object.values(utcEvents).filter((e) => e.length > 0)
+      )
     );
   },
 });
 
 function Timetable({ id }: { id: number }) {
+  const timezones = useRecoilValue(timezonesState);
   const { events, addNewEvent } = useEvents(id);
   const calendarRef = useRef(null);
+
+  if (!timezones[id]) {
+    return (
+      <Box flexGrow="2">
+        <Typography variant="h6">Select a timezone first.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Calendar
@@ -194,12 +245,19 @@ function useEvents(id: number = 0) {
     ...s,
     calendarId: "intersection",
   }));
+
+  const timezones = useRecoilValue(timezonesState);
+  const intersectionsInTimezone = convertEventObjectsFromUTC(
+    intersections,
+    timezones[id]
+  );
+
   const [globalEvents, setEvents] = useRecoilState(eventsState);
   const selectedEvents = (globalEvents[id] || []).map((e: EventObject) => ({
     ...e,
     calendarId: "selection",
   }));
-  const events = [...selectedEvents, ...intersections];
+  const events = [...selectedEvents, ...intersectionsInTimezone];
 
   function addNewEvent(event: EventObject) {
     setEvents((allEvents) => ({
