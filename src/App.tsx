@@ -93,6 +93,12 @@ const eventsState = atom({
   ],
 });
 
+type Timezones = { [key: number]: string };
+const timezonesState = atom({
+  key: "timezones",
+  default: { 0: "" } as Timezones,
+});
+
 function convertEventObjectsToUTC(
   list: EventObject[],
   timezone: typeof rawTimeZones[number]["name"]
@@ -106,7 +112,6 @@ function convertEventObjectsToUTC(
   });
 }
 
-type Timezones = { [key: number]: string };
 function convertEventsToUTC(events: Events, timezones: Timezones) {
   const result: Events = {};
   Object.keys(events)
@@ -129,11 +134,6 @@ function convertEventObjectsFromUTC(
     };
   });
 }
-
-const timezonesState = atom({
-  key: "timezones",
-  default: { 0: "" } as Timezones,
-});
 
 // select events keys
 const eventsKeysState = selector({
