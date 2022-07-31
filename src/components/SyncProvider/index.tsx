@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { Client } from 'twilio-sync';
+import { atom } from 'recoil';
+import { Client, SyncDocument } from 'twilio-sync';
 
-const SyncContext = createContext();
+const SyncContext = createContext<Client | undefined>(undefined);
 
 export default function SyncProvider({ tokenFunc, children }) {
-  const [syncClient, setSyncClient] = useState();
+  const [syncClient, setSyncClient] = useState<Client>();
 
   useEffect(() => {
     (async () => {
@@ -28,16 +29,16 @@ export default function SyncProvider({ tokenFunc, children }) {
   }, [syncClient, tokenFunc]);
 
   return (
-    <SyncContext.Provider value={{client: syncClient}}>
+    <SyncContext.Provider value={syncClient!}>
       {children}
     </SyncContext.Provider>
   );
 };
 
-export function useSyncState(roomId, name, initialValue) {
-  const { client: syncClient } = useContext(SyncContext);
-  const [doc, setDoc] = useState();
-  const [data, setDataInternal] = useState();
+export function useSyncState<T>(roomId: string, name: string, initialValue: T | undefined): [ T | undefined, (value: T) => void | undefined ] {
+  const syncClient = useContext(SyncContext);
+  const [doc, setDoc] = useState<SyncDocument>();
+  const [data, setDataInternal] = useState<T>();
 
   useEffect(() => {
     setDoc(undefined);
@@ -52,20 +53,20 @@ export function useSyncState(roomId, name, initialValue) {
           await newDoc.set({state: initialValue});
         }
         setDoc(newDoc);
-        setDataInternal(newDoc.data.state);
+        setDataInternal((newDoc.data as any).state);
         newDoc.on('updated', args => setDataInternal(args.data.state));
       }
     })();
     return () => { doc && doc.close() };
   }, [syncClient, doc, name, initialValue, roomId]);
 
-  const setData = useCallback(value => {
+  const setData = useCallback((value: T) => {
     (async () => {
       if (typeof value === 'function') {
-        await doc.set({state: value(data)});
+        await doc?.set({state: value(data)});
       }
       else {
-        await doc.set({state: value});
+        await doc?.set({state: value});
       }
     })();
   }, [doc, data]);

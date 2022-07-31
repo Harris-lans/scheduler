@@ -4,7 +4,7 @@ import { useSyncState } from "../../components/SyncProvider";
 function CollaborativeScheduler() {
     const { roomId } = useParams();
 
-    const [name, setName] = useSyncState(roomId, 'name');
+    const [name, setName] = useSyncState<string>(roomId!, 'name', undefined);
 
     const onSubmit = ev => {
         ev.preventDefault();
@@ -23,7 +23,7 @@ function CollaborativeScheduler() {
                 &nbsp;
                 <input type="submit" value="Update" />
             </form>
-            <p> Your name is: <b>{(name as any)}</b></p>
+            <p> Your name is: <b>{name}</b></p>
         </>
     );
 }

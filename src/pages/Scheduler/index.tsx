@@ -77,6 +77,7 @@ const eventsState = atom({
   effects: [
     ({ onSet, setSelf }) => {
       onSet((events) => {
+        console.log('Events - ', events);
         const mergedEvents = {} as Events;
         Object.keys(events)
           .map(Number)
