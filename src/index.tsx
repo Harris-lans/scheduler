@@ -1,16 +1,18 @@
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./pages/Scheduler";
 import { RecoilRoot } from "recoil";
-
 import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+import './index.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <RecoilRoot>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </RecoilRoot>
 );
 
