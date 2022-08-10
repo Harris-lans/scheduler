@@ -179,14 +179,14 @@ function Timetable({ id }: { id: number }) {
         {
           id: "selection",
           name: "Selection",
-          backgroundColor: "#23CE6B",
-          borderColor: "#23CE6B",
+          backgroundColor: "#00a9ff",
+          borderColor: "#00a9ff",
         },
         {
           id: "intersection",
           name: "Intersection",
-          backgroundColor: "#00a9ff",
-          borderColor: "#00a9ff",
+          backgroundColor: "#23CE6B",
+          borderColor: "#23CE6B",
         },
       ]}
       usageStatistics={false}
