@@ -2,7 +2,7 @@ import { IconButton, Toolbar, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 
-const NavBar = () => {
+export default function NavBar() {
   return (
     <AppBar position="static">
       <Toolbar variant="dense">
@@ -16,5 +16,3 @@ const NavBar = () => {
     </AppBar>
   );
 };
-
-export default NavBar;
