@@ -3,9 +3,12 @@ import { rawTimeZones } from "@vvo/tzdb";
 import { atom, useSetRecoilState } from "recoil";
 import { Timezones } from "../../services/EventsService";
 
+// Getting the global timezones state
 const timezonesState = atom<Timezones>({key: "timezones"});
 
+// This is a dropdown component for selecting timezones
 export default function TimezoneSelector({ id }: { id: number }) {
+    // Fetching set functions for the global timezone state
     const setTimezones = useSetRecoilState(timezonesState);
 
     return (

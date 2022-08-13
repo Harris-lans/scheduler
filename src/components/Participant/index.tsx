@@ -17,6 +17,7 @@ const eventsKeysState = selector({
     },
 });
 
+// Returns hooks for managing participants
 export function useParticipants() {
     const eventsKeys = useRecoilValue(eventsKeysState);
     const setEvents = useSetRecoilState(eventsState);
@@ -49,6 +50,7 @@ export function useParticipants() {
     };
 }
 
+// Component representing each participant in the scheduling process
 export default function Participant({ id }: { id: number }) {
     const { removeParticipant } = useParticipants();
 

@@ -5,8 +5,11 @@ import Calendar from "@toast-ui/react-calendar";
 import { Events, EventsService, Timezones } from "../../services/EventsService";
 import type { EventObject } from "@toast-ui/calendar";
 
+// Fetching global events and timezones states 
 const eventsState = atom<Events>({ key: "events" });
 const timezonesState = atom<Timezones>({ key: "timezones" });
+
+// Setting up intersection selector that uses the events and timezone states to calculate intersection of events
 const intersectionsState = selector({
     key: "intersections",
     get: ({ get }) => {
@@ -22,6 +25,7 @@ const intersectionsState = selector({
     },
 });
 
+// Returns hooks for managing events
 function useEvents(id: number = 0) {
     const intersections = useRecoilValue(intersectionsState).map((s) => ({
         ...s,
@@ -54,6 +58,7 @@ function useEvents(id: number = 0) {
     };
 }
 
+// Component that displays the selected time events and the intersection in the chosen timezone
 export default function Timetable({ id }: { id: number }) {
     const timezones = useRecoilValue(timezonesState);
     const { events, addNewEvent } = useEvents(id);
