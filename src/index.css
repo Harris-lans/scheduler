@@ -14,7 +14,7 @@ body {
 
 .page {
     width: calc(100% - 4rem);
-    height: calc(100% - 4rem);
+    height: calc(100% - 9rem);
     padding: 2rem;
     color: rgb(64, 64, 64);
     text-align: justify;

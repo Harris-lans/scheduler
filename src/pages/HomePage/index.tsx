@@ -1,13 +1,11 @@
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import LogoBlue from '../../components/LogoBlue';
 import './index.css';
 
 function HomePage () {
     return (
         <div id='home-page' className="page">
-            <h1><LogoBlue />&nbsp;Scheduler</h1>
             <div className="background">
                 <CalendarMonthIcon className='icon'/>
             </div>

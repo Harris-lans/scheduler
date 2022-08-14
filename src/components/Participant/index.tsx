@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, Card, IconButton } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TimezoneSelector from "../TimezoneSelector";
 import { Events, Timezones } from "../../services/EventsService";
@@ -55,23 +55,28 @@ export default function Participant({ id }: { id: number }) {
     const { removeParticipant } = useParticipants();
 
     return (
-        <Box
-            minWidth="300px"
-            width="300px"
-            padding={2}
-            display="flex"
-            flexDirection="column"
-        >
-            <Box alignSelf="end">
-                <IconButton onClick={() => removeParticipant(id)}>
-                    <DeleteForeverIcon />
-                </IconButton>
-            </Box>
-            <Box pb={2}>
-                <TimezoneSelector id={id} />
-            </Box>
+        <Card variant="outlined"
+            sx={{
+                overflowX: "visible",
+                overflowY: "scroll",
+            }}>
+            <Box
+                width="300px"
+                padding={2}
+                display="flex"
+                flexDirection="column"
+            >
+                <Box alignSelf="end">
+                    <IconButton onClick={() => removeParticipant(id)}>
+                        <DeleteForeverIcon color={"error"} fontSize={"large"} />
+                    </IconButton>
+                </Box>
+                <Box pb={2}>
+                    <TimezoneSelector id={id} />
+                </Box>
 
-            <Timetable id={id} />
-        </Box>
+                <Timetable id={id} />
+            </Box>
+        </Card>
     );
 }
