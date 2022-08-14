@@ -1,15 +1,16 @@
 import { IconButton, Toolbar, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import ScheduleIcon from '@mui/icons-material/Schedule';
+import LogoWhite from '../LogoWhite';
+import './index.css';
 
 export default function NavBar() {
   return (
     <AppBar position="static">
-      <Toolbar variant="dense">
+      <Toolbar variant="dense" id="nav-bar">
         <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-          <ScheduleIcon />
+          <LogoWhite />
         </IconButton>
-        <Typography variant="h6" color="inherit" component="div">
+        <Typography color="inherit" component="div">
           Scheduler
         </Typography>
       </Toolbar>

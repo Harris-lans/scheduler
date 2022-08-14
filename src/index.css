@@ -2,16 +2,9 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-        monospace;
 }
 
 #root {
@@ -35,6 +28,8 @@ code {
     color: #1565c0;
     font-size: 5rem;
     margin: 0;
+    display: flex;
+    align-items: center;
 }
 
 .page h1 > *{

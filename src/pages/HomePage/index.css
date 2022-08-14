@@ -15,3 +15,7 @@
     left: 45%;
     position: absolute;
 }
+
+#home-page .logo {
+    height: 6rem;
+}

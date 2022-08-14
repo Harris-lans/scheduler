@@ -3,6 +3,7 @@ import {
   Button,
 } from "@mui/material";
 import { atom } from "recoil";
+import NavBar from "../../components/NavBar";
 import Participant, { useParticipants } from "../../components/Participant";
 import { Events, EventsService, Timezones } from "../../services/EventsService";
 
@@ -38,20 +39,25 @@ function Scheduler() {
   const { participants, addNewParticipant } = useParticipants();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="row"
-      width="100%"
-      sx={{
-        overflowX: "scroll",
-        overflowY: "hidden",
-      }}
-    >
-      {participants.map((id) => (
-        <Participant key={id} id={id} />
-      ))}
-      <Button onClick={addNewParticipant}>Add new participant</Button>
-    </Box>
+    <div>
+      <NavBar/>
+      <div className="page">
+        <Box
+          display="flex"
+          flexDirection="row"
+          width="100%"
+          sx={{
+            overflowX: "scroll",
+            overflowY: "hidden",
+          }}
+        >
+          {participants.map((id) => (
+            <Participant key={id} id={id} />
+          ))}
+          <Button onClick={addNewParticipant}>Add new participant</Button>
+        </Box>
+      </div>
+    </div>
   );
 }
 
