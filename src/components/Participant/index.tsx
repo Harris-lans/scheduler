@@ -57,8 +57,7 @@ export default function Participant({ id }: { id: number }) {
     return (
         <Card variant="outlined"
             sx={{
-                overflowX: "visible",
-                overflowY: "scroll",
+                overflow: "clip",
             }}>
             <Box
                 width="300px"

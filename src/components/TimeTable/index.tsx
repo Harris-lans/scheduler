@@ -91,6 +91,7 @@ export default function Timetable({ id }: { id: number }) {
             ]}
             usageStatistics={false}
             view="day"
+            height="450px"
             week={{
                 showTimezoneCollapseButton: true,
                 timezonesCollapsed: true,
