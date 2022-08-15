@@ -76,7 +76,7 @@ export default function Participant({ id }: { id: number }) {
             >
                 <Box alignSelf="end">
                     <IconButton onClick={() => removeParticipant(id)}>
-                        <DeleteForeverIcon color={"error"} fontSize={"large"} />
+                        <DeleteForeverIcon style={{color: '#EC407A'}} fontSize="medium" />
                     </IconButton>
                 </Box>
                 <Box pb={2}>

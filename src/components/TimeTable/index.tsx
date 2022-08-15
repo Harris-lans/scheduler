@@ -79,26 +79,28 @@ export default function Timetable({ id }: { id: number }) {
                 {
                     id: "selection",
                     name: "Selection",
-                    backgroundColor: "#00a9ff",
-                    borderColor: "#00a9ff",
+                    backgroundColor: "#2196F3",
+                    borderColor: "#2196F3",
+                    color: "#FFFFFF"
                 },
                 {
                     id: "intersection",
                     name: "Intersection",
-                    backgroundColor: "#23CE6B",
-                    borderColor: "#23CE6B",
+                    backgroundColor: "#1DE9B6",
+                    borderColor: "#1DE9B6",
+                    color: "#FFFFFF"
                 },
             ]}
             usageStatistics={false}
             view="day"
             height="450px"
-            timezone={{
-                zones: [
-                    {
-                        timezoneName: timezones[id]
-                    }
-                ]
-            }}
+            // timezone={{
+            //     zones: [
+            //         {
+            //             timezoneName: timezones[id]
+            //         }
+            //     ]
+            // }}
             week={{
                 showTimezoneCollapseButton: true,
                 timezonesCollapsed: true,
