@@ -46,7 +46,7 @@ function Scheduler() {
         display="inline-flex"
         flexDirection="row"
         width="100%"
-        height="85%"
+        height="89%"
         gap="3rem"
         sx={{
           overflowX: "scroll",

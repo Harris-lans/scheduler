@@ -92,6 +92,13 @@ export default function Timetable({ id }: { id: number }) {
             usageStatistics={false}
             view="day"
             height="450px"
+            timezone={{
+                zones: [
+                    {
+                        timezoneName: timezones[id]
+                    }
+                ]
+            }}
             week={{
                 showTimezoneCollapseButton: true,
                 timezonesCollapsed: true,
