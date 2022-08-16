@@ -1,9 +1,10 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, Card, IconButton, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import TimezoneSelector from "../TimezoneSelector";
 import { Events, Timezones } from "../../services/EventsService";
 import { atom, selector, useRecoilValue, useSetRecoilState } from "recoil";
 import Timetable from "../TimeTable";
+import { useEffect, useState } from "react";
 
 const eventsState = atom<Events>({ key: "events" });
 const timezonesState = atom<Timezones>({ key: "timezones" });
@@ -53,25 +54,49 @@ export function useParticipants() {
 // Component representing each participant in the scheduling process
 export default function Participant({ id }: { id: number }) {
     const { removeParticipant } = useParticipants();
+    const [ currentTime, setCurrentTime ] = useState(new Date());
+    const timezones = useRecoilValue(timezonesState);
+
+    useEffect(() => {
+        setInterval(() => setCurrentTime(new Date()), 3000);
+    }, []);
+      
+    console.log();
 
     return (
-        <Box
-            minWidth="300px"
-            width="300px"
-            padding={2}
-            display="flex"
-            flexDirection="column"
-        >
-            <Box alignSelf="end">
-                <IconButton onClick={() => removeParticipant(id)}>
-                    <DeleteForeverIcon />
-                </IconButton>
+        <Card variant="outlined"
+            sx={{
+                overflow: "clip",
+            }}>
+            <Box
+                width="300px"
+                padding={2}
+                display="flex"
+                flexDirection="column"
+            >
+                <Box alignSelf="end">
+                    <IconButton onClick={() => removeParticipant(id)}>
+                        <DeleteForeverIcon style={{color: '#EC407A'}} fontSize="medium" />
+                    </IconButton>
+                </Box>
+                <Box pb={2}>
+                    <TimezoneSelector id={id} />
+                </Box>
+                {
+                    timezones[id] && 
+                    <Box pb={2}>
+                        <Typography variant="h4">
+                            {currentTime.toLocaleString('en-US', {
+                                    hour: 'numeric',
+                                    minute: 'numeric',
+                                    hour12: true,
+                                    timeZone: timezones[id]
+                                })}
+                        </Typography>
+                    </Box>
+                }
+                <Timetable id={id} />
             </Box>
-            <Box pb={2}>
-                <TimezoneSelector id={id} />
-            </Box>
-
-            <Timetable id={id} />
-        </Box>
+        </Card>
     );
 }

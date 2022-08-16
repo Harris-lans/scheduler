@@ -1,0 +1,13 @@
+#nav-bar {
+    height: 3rem;
+    padding: 1rem;
+}
+
+#nav-bar > * {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+#nav-bar .logo {
+    width: 4rem;
+}

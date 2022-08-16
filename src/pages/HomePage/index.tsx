@@ -1,5 +1,4 @@
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import './index.css';
@@ -7,7 +6,6 @@ import './index.css';
 function HomePage () {
     return (
         <div id='home-page' className="page">
-            <h1><ScheduleIcon />&nbsp;Scheduler</h1>
             <div className="background">
                 <CalendarMonthIcon className='icon'/>
             </div>
