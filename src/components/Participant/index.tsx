@@ -54,13 +54,13 @@ export function useParticipants() {
 // Component representing each participant in the scheduling process
 export default function Participant({ id }: { id: number }) {
     const { removeParticipant } = useParticipants();
-    const [ currentTime, setCurrentTime ] = useState(new Date());
+    const [currentTime, setCurrentTime] = useState(new Date());
     const timezones = useRecoilValue(timezonesState);
 
     useEffect(() => {
         setInterval(() => setCurrentTime(new Date()), 3000);
     }, []);
-      
+
     console.log();
 
     return (
@@ -74,27 +74,25 @@ export default function Participant({ id }: { id: number }) {
                 display="flex"
                 flexDirection="column"
             >
-                <Box alignSelf="end">
+                <Box color="#1565c0" display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" paddingBottom="0.5rem">
+                    {
+                        timezones[id] &&
+                        <Typography variant="h5">
+                            {currentTime.toLocaleString('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true,
+                                timeZone: timezones[id]
+                            })}
+                        </Typography>
+                    }
                     <IconButton onClick={() => removeParticipant(id)}>
-                        <DeleteForeverIcon style={{color: '#EC407A'}} fontSize="medium" />
+                        <DeleteForeverIcon style={{ color: '#EC407A' }} fontSize="medium" />
                     </IconButton>
                 </Box>
                 <Box pb={2}>
                     <TimezoneSelector id={id} />
                 </Box>
-                {
-                    timezones[id] && 
-                    <Box pb={2}>
-                        <Typography variant="h4">
-                            {currentTime.toLocaleString('en-US', {
-                                    hour: 'numeric',
-                                    minute: 'numeric',
-                                    hour12: true,
-                                    timeZone: timezones[id]
-                                })}
-                        </Typography>
-                    </Box>
-                }
                 <Timetable id={id} />
             </Box>
         </Card>

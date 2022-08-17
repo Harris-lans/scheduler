@@ -93,7 +93,7 @@ export default function Timetable({ id }: { id: number }) {
             ]}
             usageStatistics={false}
             view="day"
-            height="450px"
+            height="560px"
             // timezone={{
             //     zones: [
             //         {
