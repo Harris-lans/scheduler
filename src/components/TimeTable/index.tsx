@@ -59,7 +59,7 @@ function useEvents(id: number = 0) {
     }));
   }
 
-  const changeElement: ExternalEventTypes["beforeUpdateEvent"] = ({
+  const changeEvent: ExternalEventTypes["beforeUpdateEvent"] = ({
     event,
     changes,
   }) => {
@@ -93,17 +93,25 @@ function useEvents(id: number = 0) {
     }));
   };
 
+  function deleteEvent(event: EventObject) {
+    setEvents((allEvents) => ({
+      ...allEvents,
+      [id]: allEvents[id].filter((e) => e.id !== event.id),
+    }));
+  }
+
   return {
     events,
     addNewEvent,
-    changeElement,
+    changeEvent,
+    deleteEvent,
   };
 }
 
 // Component that displays the selected time events and the intersection in the chosen timezone
 export default function Timetable({ id }: { id: number }) {
   const timezones = useRecoilValue(timezonesState);
-  const { events, addNewEvent, changeElement } = useEvents(id);
+  const { events, addNewEvent, changeEvent, deleteEvent } = useEvents(id);
   const calendarRef = useRef(null);
 
   if (!timezones[id]) {
@@ -149,7 +157,9 @@ export default function Timetable({ id }: { id: number }) {
         const calendarInstance = (calendarRef.current as any).getInstance();
         calendarInstance.clearGridSelections();
       }}
-      onBeforeUpdateEvent={changeElement}
+      useDetailPopup
+      onBeforeDeleteEvent={deleteEvent}
+      onBeforeUpdateEvent={changeEvent}
       events={events}
     />
   );
