@@ -1,21 +1,21 @@
 #home-page .background {
-    top: 25%;
-    left: 10%;
-    position: absolute;
+  top: 25%;
+  left: 10%;
+  position: absolute;
 }
 
 #home-page .background .icon {
-    font-size: 30rem;
-    color: rgb(215, 215, 215);
+  font-size: 30rem;
+  color: rgb(215, 215, 215);
 }
 
 #home-page .description {
-    width: 40%;
-    top: 25%;
-    left: 45%;
-    position: absolute;
+  width: 40%;
+  top: 25%;
+  left: 45%;
+  position: absolute;
 }
 
 #home-page .logo {
-    height: 6rem;
+  height: 6rem;
 }

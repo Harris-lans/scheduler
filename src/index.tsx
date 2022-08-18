@@ -3,7 +3,7 @@ import { RecoilRoot } from "recoil";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import './index.css';
+import "./index.css";
 import "@toast-ui/calendar/dist/toastui-calendar.min.css";
 
 const root = ReactDOM.createRoot(

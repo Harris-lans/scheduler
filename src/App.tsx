@@ -8,8 +8,8 @@ function App() {
     <>
       <NavBar />
       <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/scheduler" element={<Scheduler />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/scheduler" element={<Scheduler />} />
       </Routes>
     </>
   );

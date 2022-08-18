@@ -1,12 +1,9 @@
-import {
-  Box,
-  Fab
-} from "@mui/material";
+import { Box, Fab } from "@mui/material";
 import { atom } from "recoil";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Participant, { useParticipants } from "../../components/Participant";
 import { Events, EventsService, Timezones } from "../../services/EventsService";
-import './index.css';
+import "./index.css";
 
 // creating required atom states with effects and default values
 atom({
@@ -57,7 +54,12 @@ function Scheduler() {
           <Participant key={id} id={id} />
         ))}
       </Box>
-      <Fab id="add-participant-button" color="primary" aria-label="add" onClick={addNewParticipant}>
+      <Fab
+        id="add-participant-button"
+        color="primary"
+        aria-label="add"
+        onClick={addNewParticipant}
+      >
         <PersonAddIcon />
       </Fab>
     </div>
