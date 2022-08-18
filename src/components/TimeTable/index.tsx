@@ -1,5 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import { useRef } from "react";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Popper,
+  ClickAwayListener,
+} from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useState, useRef } from "react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import Calendar from "@toast-ui/react-calendar";
 import { Events, EventsService, Timezones } from "../../services/EventsService";
@@ -109,6 +116,33 @@ export default function Timetable({ id }: { id: number }) {
   const { events, addNewEvent, changeEvent, deleteEvent } = useEvents(id);
   const calendarRef = useRef<Calendar | null>(null);
 
+  const [selectedEvent, setSelectedEvent] = useState<EventObject | null>(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const open = Boolean(anchorEl);
+
+  function showDeletePopper({
+    event,
+    nativeEvent,
+  }: {
+    event: EventObject;
+    nativeEvent: MouseEvent;
+  }) {
+    if (event.calendarId === "intersection") {
+      return;
+    }
+
+    setSelectedEvent(event);
+    setAnchorEl(nativeEvent.target as HTMLElement);
+  }
+
+  function closePopper() {
+    if (anchorEl) {
+      setSelectedEvent(null);
+      setAnchorEl(null);
+    }
+  }
+
   if (!timezones[id]) {
     return (
       <Box flexGrow="2">
@@ -118,42 +152,68 @@ export default function Timetable({ id }: { id: number }) {
   }
 
   return (
-    <Calendar
-      ref={calendarRef}
-      calendars={[
-        {
-          id: "selection",
-          name: "Selection",
-          backgroundColor: "#2196F3",
-          borderColor: "#2196F3",
-          color: "#FFFFFF",
-        },
-        {
-          id: "intersection",
-          name: "Intersection",
-          backgroundColor: "#1DE9B6",
-          borderColor: "#1DE9B6",
-          color: "#FFFFFF",
-        },
-      ]}
-      usageStatistics={false}
-      view="day"
-      height="560px"
-      week={{
-        showTimezoneCollapseButton: true,
-        timezonesCollapsed: true,
-        eventView: ["time"],
-        taskView: false,
-        showNowIndicator: false,
-      }}
-      onSelectDateTime={(event) => {
-        addNewEvent(event);
-        calendarRef?.current?.getInstance()?.clearGridSelections();
-      }}
-      useDetailPopup
-      onBeforeDeleteEvent={deleteEvent}
-      onBeforeUpdateEvent={changeEvent}
-      events={events}
-    />
+    <>
+      <Calendar
+        ref={calendarRef}
+        calendars={[
+          {
+            id: "selection",
+            name: "Selection",
+            backgroundColor: "#2196F3",
+            borderColor: "#2196F3",
+            color: "#FFFFFF",
+          },
+          {
+            id: "intersection",
+            name: "Intersection",
+            backgroundColor: "#1DE9B6",
+            borderColor: "#1DE9B6",
+            color: "#FFFFFF",
+          },
+        ]}
+        usageStatistics={false}
+        view="day"
+        height="560px"
+        week={{
+          showTimezoneCollapseButton: true,
+          timezonesCollapsed: true,
+          eventView: ["time"],
+          taskView: false,
+          showNowIndicator: false,
+        }}
+        onSelectDateTime={(event) => {
+          addNewEvent(event);
+          calendarRef?.current?.getInstance()?.clearGridSelections();
+        }}
+        onBeforeDeleteEvent={deleteEvent}
+        onBeforeUpdateEvent={changeEvent}
+        onClickEvent={showDeletePopper}
+        events={events}
+      />
+      <Popper open={open} anchorEl={anchorEl} placement="left">
+        <ClickAwayListener onClickAway={closePopper}>
+          <Box
+            sx={{
+              border: 1,
+              borderRadius: "50%",
+              backgroundColor: "#FFFFFF",
+              mr: -2,
+            }}
+          >
+            <IconButton
+              onClick={() => {
+                deleteEvent(selectedEvent);
+                closePopper();
+              }}
+            >
+              <DeleteForeverIcon
+                style={{ color: "#EC407A" }}
+                fontSize="medium"
+              />
+            </IconButton>
+          </Box>
+        </ClickAwayListener>
+      </Popper>
+    </>
   );
 }
