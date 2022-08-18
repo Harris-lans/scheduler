@@ -3,7 +3,8 @@ import { useRef } from "react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import Calendar from "@toast-ui/react-calendar";
 import { Events, EventsService, Timezones } from "../../services/EventsService";
-import type { EventObject } from "@toast-ui/calendar";
+import type { EventObject, ExternalEventTypes } from "@toast-ui/calendar";
+import { TZDate } from "@toast-ui/calendar";
 
 // Fetching global events and timezones states
 const eventsState = atom<Events>({ key: "events" });
@@ -46,23 +47,63 @@ function useEvents(id: number = 0) {
   const events = [...selectedEvents, ...intersectionsInTimezone];
 
   function addNewEvent(event: EventObject) {
-    console.log(event);
+    // generate a random id for the event
+    const eventId = Math.random().toString(36).substring(2, 15);
+
     setEvents((allEvents) => ({
       ...allEvents,
-      [id]: [...(allEvents[id] || []), { start: event.start, end: event.end }],
+      [id]: [
+        ...(allEvents[id] || []),
+        { id: eventId, start: event.start, end: event.end },
+      ],
     }));
   }
+
+  const changeElement: ExternalEventTypes["beforeUpdateEvent"] = ({
+    event,
+    changes,
+  }) => {
+    if (event.calendarId !== "selection") {
+      // we don't want to change events that are not user selections
+      return;
+    }
+
+    // TZDate is an internal object, and our algorithms use
+    // the normal date object
+    if (changes?.start?.constructor?.name === "TZDate") {
+      changes.start = (changes.start as TZDate).toDate();
+    }
+
+    if (changes?.end?.constructor?.name === "TZDate") {
+      changes.end = (changes.end as TZDate).toDate();
+    }
+
+    setEvents((allEvents) => ({
+      ...allEvents,
+      [id]: allEvents[id].map((e) => {
+        if (e.id === event.id) {
+          return {
+            ...e,
+            ...changes,
+          };
+        }
+
+        return e;
+      }),
+    }));
+  };
 
   return {
     events,
     addNewEvent,
+    changeElement,
   };
 }
 
 // Component that displays the selected time events and the intersection in the chosen timezone
 export default function Timetable({ id }: { id: number }) {
   const timezones = useRecoilValue(timezonesState);
-  const { events, addNewEvent } = useEvents(id);
+  const { events, addNewEvent, changeElement } = useEvents(id);
   const calendarRef = useRef(null);
 
   if (!timezones[id]) {
@@ -108,6 +149,7 @@ export default function Timetable({ id }: { id: number }) {
         const calendarInstance = (calendarRef.current as any).getInstance();
         calendarInstance.clearGridSelections();
       }}
+      onBeforeUpdateEvent={changeElement}
       events={events}
     />
   );
