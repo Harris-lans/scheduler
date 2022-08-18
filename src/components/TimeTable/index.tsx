@@ -107,7 +107,7 @@ function useEvents(id: number = 0) {
 export default function Timetable({ id }: { id: number }) {
   const timezones = useRecoilValue(timezonesState);
   const { events, addNewEvent, changeEvent, deleteEvent } = useEvents(id);
-  const calendarRef = useRef(null);
+  const calendarRef = useRef<Calendar | null>(null);
 
   if (!timezones[id]) {
     return (
@@ -148,9 +148,7 @@ export default function Timetable({ id }: { id: number }) {
       }}
       onSelectDateTime={(event) => {
         addNewEvent(event);
-
-        const calendarInstance = (calendarRef.current as any).getInstance();
-        calendarInstance.clearGridSelections();
+        calendarRef?.current?.getInstance()?.clearGridSelections();
       }}
       useDetailPopup
       onBeforeDeleteEvent={deleteEvent}
