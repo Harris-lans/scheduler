@@ -61,8 +61,6 @@ export default function Participant({ id }: { id: number }) {
     setInterval(() => setCurrentTime(new Date()), 3000);
   }, []);
 
-  console.log();
-
   return (
     <Card
       variant="outlined"
