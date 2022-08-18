@@ -63,11 +63,6 @@ function useEvents(id: number = 0) {
     event,
     changes,
   }) => {
-    if (event.calendarId !== "selection") {
-      // we don't want to change events that are not user selections
-      return;
-    }
-
     // TZDate is an internal object, and our algorithms use
     // the normal date object
     if (changes?.start?.constructor?.name === "TZDate") {
