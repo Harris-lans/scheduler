@@ -46,6 +46,7 @@ function useEvents(id: number = 0) {
   const events = [...selectedEvents, ...intersectionsInTimezone];
 
   function addNewEvent(event: EventObject) {
+    console.log(event);
     setEvents((allEvents) => ({
       ...allEvents,
       [id]: [...(allEvents[id] || []), { start: event.start, end: event.end }],
@@ -94,18 +95,12 @@ export default function Timetable({ id }: { id: number }) {
       usageStatistics={false}
       view="day"
       height="560px"
-      // timezone={{
-      //     zones: [
-      //         {
-      //             timezoneName: timezones[id]
-      //         }
-      //     ]
-      // }}
       week={{
         showTimezoneCollapseButton: true,
         timezonesCollapsed: true,
         eventView: ["time"],
         taskView: false,
+        showNowIndicator: false,
       }}
       onSelectDateTime={(event) => {
         addNewEvent(event);
