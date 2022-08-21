@@ -65,7 +65,7 @@ export default function Participant({ id }: { id: number }) {
     <Card
       variant="outlined"
       sx={{
-        overflow: "clip",
+        overflow: "auto",
       }}
     >
       <Box width="300px" padding={2} display="flex" flexDirection="column">
