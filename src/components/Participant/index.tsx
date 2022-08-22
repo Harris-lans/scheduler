@@ -87,14 +87,22 @@ export default function Participant({ id }: { id: number }) {
               })}
             </Typography>
           )}
-          <IconButton onClick={() => removeParticipant(id)}>
+          <IconButton         
+            className="delete-participant-button"
+            onClick={() => removeParticipant(id)}
+          >
             <DeleteForeverIcon style={{ color: "#EC407A" }} fontSize="medium" />
           </IconButton>
         </Box>
-        <Box pb={2}>
+        <Box 
+          className="timezone-selector"
+          pb={2}
+        >
           <TimezoneSelector id={id} />
         </Box>
-        <Timetable id={id} />
+        <Box className="timetable-container" >
+          <Timetable id={id} />
+        </Box>
       </Box>
     </Card>
   );
