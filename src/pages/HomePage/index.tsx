@@ -5,6 +5,7 @@ import "./index.css";
 
 function HomePage() {
   return (
+    
     <div id="home-page" className="page">
       <div className="background">
         <CalendarMonthIcon className="icon" />
@@ -19,6 +20,7 @@ function HomePage() {
         <br />
         <br />
         <Button
+          className="button"
           component={Link}
           to={"/scheduler"}
           variant="contained"
