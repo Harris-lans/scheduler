@@ -11,3 +11,7 @@
 #nav-bar .logo {
   width: 4rem;
 }
+
+#nav-bar .button-container {
+  margin-left: auto;
+}
