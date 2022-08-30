@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import { atom } from "recoil";
-import NavBar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import Scheduler from "./pages/Scheduler";
+import NavBar from "./components/NavBar";
+import MobileWarningScreen from "./components/MobileWarningScreen";
 
 // Creating atom state for onboarding status 
 atom({
@@ -24,6 +25,7 @@ atom({
 function App() {
   return (
     <>
+      <MobileWarningScreen />
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />

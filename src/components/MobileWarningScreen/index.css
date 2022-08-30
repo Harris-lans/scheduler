@@ -1,0 +1,73 @@
+@media (min-width:320px)  
+{ 
+    /* smartphones, iPhone, portrait 480x320 phones */ 
+    .mobile-warning-screen {
+        display: flex;
+    }
+}
+@media (min-width:481px)  
+{ 
+    /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ 
+    .mobile-warning-screen {
+        display: flex;
+    }
+}
+@media (min-width:641px)  
+{ 
+    /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
+    .mobile-warning-screen {
+        display: flex;
+    }
+}
+@media (min-width:961px)  
+{ 
+    /* tablet, landscape iPad, lo-res laptops ands desktops */
+    .mobile-warning-screen {
+        display: none;
+    }
+}
+@media (min-width:1025px) 
+{ 
+    /* big landscape tablets, laptops, and desktops */ 
+    .mobile-warning-screen {
+        display: none;
+    }
+}
+@media (min-width:1281px) 
+{ 
+    /* hi-res laptops and desktops */
+    .mobile-warning-screen {
+        display: none;
+    }
+}
+
+.mobile-warning-screen {
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.mobile-warning-screen .sad-icon {
+    color: #1565c0;
+    font-size: 7rem;
+}
+
+.mobile-warning-screen .no-mobile-icon {
+    color: #ec4040;
+    font-size: 3rem;
+    margin: 1rem;
+}
+
+.mobile-warning-screen h2 {
+    color: #1565c0;
+    font-size: 3.5rem;
+    text-align: left;
+}
+
+.mobile-warning-screen h2 > * {
+    color: #1565c0;
+    font-size: 3.5rem;
+    text-align: left;
+}

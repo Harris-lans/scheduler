@@ -54,3 +54,15 @@ body {
 .page {
   font-size: 1.3rem;
 }
+
+.fullscreen-popup {
+  z-index: 2000;
+  padding: 2rem;
+  width: calc(100% - 4rem);
+  height: calc(100% - 4rem);
+  min-width:calc(100% - 4rem);
+  min-height: calc(100% - 4rem);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
