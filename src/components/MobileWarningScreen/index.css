@@ -4,6 +4,10 @@
     .mobile-warning-screen {
         display: flex;
     }
+
+    body {
+        position: fixed;
+    }
 }
 @media (min-width:481px)  
 { 
@@ -11,12 +15,20 @@
     .mobile-warning-screen {
         display: flex;
     }
+
+    body {
+        position: fixed;
+    }
 }
 @media (min-width:641px)  
 { 
     /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ 
     .mobile-warning-screen {
         display: flex;
+    }
+
+    body {
+        position: fixed;
     }
 }
 @media (min-width:961px)  
@@ -51,7 +63,7 @@
 
 .mobile-warning-screen .sad-icon {
     color: #1565c0;
-    font-size: 7rem;
+    font-size: 9rem;
 }
 
 .mobile-warning-screen .no-mobile-icon {
@@ -62,12 +74,12 @@
 
 .mobile-warning-screen h2 {
     color: #1565c0;
-    font-size: 3.5rem;
+    font-size: 3rem;
     text-align: left;
 }
 
 .mobile-warning-screen h2 > * {
     color: #1565c0;
-    font-size: 3.5rem;
+    font-size: 3rem;
     text-align: left;
 }
